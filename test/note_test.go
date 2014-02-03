@@ -10,7 +10,7 @@ import (
 	"github.com/bprosnitz/musicgo/notes"
 )
 
-func TestString(t *testing.T) {
+func TestNoteString(t *testing.T) {
 	for n := Note(0); n < 12; n++ {
 		letter := "B"
 		for letter_val, num := range noteOffsets {
@@ -90,7 +90,7 @@ func TestParseNote(t *testing.T) {
 	}
 }
 
-func TestInterval(t *testing.T) {
+func TestNoteInterval(t *testing.T) {
 	type expectedResult struct {
 		initial  Note
 		interval Interval
@@ -110,7 +110,7 @@ func TestInterval(t *testing.T) {
 	}
 }
 
-func TestIndex(t *testing.T) {
+func TestNoteIndex(t *testing.T) {
 	type expectedResult struct {
 		input  Note
 		output NoteIndex
@@ -132,7 +132,7 @@ func TestIndex(t *testing.T) {
 	}
 }
 
-func TestCents(t *testing.T) {
+func TestNoteCents(t *testing.T) {
 	type expectedResult struct {
 		input  Note
 		output Cents
@@ -150,6 +150,26 @@ func TestCents(t *testing.T) {
 	for _, test := range tests {
 		if test.input.Cents() != test.output {
 			t.Errorf("Invalid cents for %s: %v. Expected %v.", test.input, test.input.Cents(), test.output)
+		}
+	}
+}
+
+func TestNoteOctave(t *testing.T) {
+	type expectedResult struct {
+		inNote   Note
+		inOctave Octave
+		outPitch Pitch
+	}
+	tests := []expectedResult{
+		expectedResult{notes.C, 0, 0},
+		expectedResult{notes.B, 0, 11},
+		expectedResult{notes.B, -1, -1},
+		expectedResult{notes.D, 4, 50},
+		expectedResult{notes.CSharp + 0.5, 1, 13.5},
+	}
+	for _, test := range tests {
+		if test.inNote.Octave(test.inOctave) != test.outPitch {
+			t.Errorf("Expected pitch of %v in octave %v to be %f but was %f", test.inNote, test.inOctave, test.outPitch, test.inNote.Octave(test.inOctave))
 		}
 	}
 }

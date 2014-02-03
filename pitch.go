@@ -27,7 +27,7 @@ func (p Pitch) Cents() Cents {
 }
 
 func (p Pitch) Octave() Octave {
-	return Octave(p / 12)
+	return Octave(math.Floor(float64(p / 12)))
 }
 
 func (p Pitch) Note() Note {

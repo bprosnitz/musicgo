@@ -34,6 +34,11 @@ func (n Note) Cents() Cents {
 	return Cents(math.Floor(0.5 + (n64-math.Floor(n64))*100))
 }
 
+func (n Note) Octave(o Octave) Pitch {
+	norm := normalize(n)
+	return Pitch(o)*12 + Pitch(norm)
+}
+
 func (n Note) String() string {
 	name := noteNames[Note(n.Index())]
 	c := n.Cents()
