@@ -10,6 +10,25 @@ import (
 	"github.com/bprosnitz/musicgo/notes"
 )
 
+func TestPitchString(t *testing.T) {
+	type expectedResult struct {
+		in  Pitch
+		out string
+	}
+	tests := []expectedResult{
+		expectedResult{notes.A.Octave(0), "A0"},
+		expectedResult{notes.Db.Octave(3), "C#3"},
+		expectedResult{notes.Db.Octave(-1), "C#[-1]"},
+		expectedResult{notes.B.Octave(2) + 0.2, "B2 (20 cents)"},
+		expectedResult{notes.F.Octave(-1) + 0.342, "F[-1] (34 cents)"},
+	}
+	for _, test := range tests {
+		if test.in.String() != test.out {
+			t.Errorf("Pitch string output didn't match expectation. Was %v. Expected %v.", test.in.String(), test.out)
+		}
+	}
+}
+
 func TestPitchInterval(t *testing.T) {
 	type expectedResult struct {
 		initial  Pitch

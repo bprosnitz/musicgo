@@ -11,20 +11,37 @@ import (
 )
 
 func TestNoteString(t *testing.T) {
-	for n := Note(0); n < 12; n++ {
-		letter := "B"
-		for letter_val, num := range noteOffsets {
-			if num > n {
-				break
-			}
-			if num == n {
-				letter = string(letter_val)
-			} else {
-				letter = string(letter_val) + "#"
-			}
-		}
-		if Note(n).String() != letter {
-			t.Errorf("Note value %v and representation %v don't match", n, letter)
+	type expectedResult struct {
+		in  Note
+		out string
+	}
+	tests := []expectedResult{
+		expectedResult{notes.A, "A"},
+		expectedResult{notes.ASharp, "A#"},
+		expectedResult{notes.B, "B"},
+		expectedResult{notes.C, "C"},
+		expectedResult{notes.CSharp, "C#"},
+		expectedResult{notes.D, "D"},
+		expectedResult{notes.DSharp, "D#"},
+		expectedResult{notes.E, "E"},
+		expectedResult{notes.F, "F"},
+		expectedResult{notes.FSharp, "F#"},
+		expectedResult{notes.G, "G"},
+		expectedResult{notes.GSharp, "G#"},
+		expectedResult{notes.BSharp, "C"},
+		expectedResult{notes.ESharp, "F"},
+		expectedResult{notes.Ab, "G#"},
+		expectedResult{notes.Bb, "A#"},
+		expectedResult{notes.Cb, "B"},
+		expectedResult{notes.Db, "C#"},
+		expectedResult{notes.Eb, "D#"},
+		expectedResult{notes.Fb, "E"},
+		expectedResult{notes.Gb, "F#"},
+		expectedResult{notes.A + 0.52, "A (52 cents)"},
+	}
+	for _, test := range tests {
+		if test.in.String() != test.out {
+			t.Errorf("Note string output didn't match expectation. Was %v. Expected %v.", test.in.String(), test.out)
 		}
 	}
 }

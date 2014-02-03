@@ -1,6 +1,7 @@
 package musicgo
 
 import (
+	"fmt"
 	"math"
 )
 
@@ -28,6 +29,22 @@ func (p Pitch) Cents() Cents {
 
 func (p Pitch) Octave() Octave {
 	return Octave(math.Floor(float64(p / 12)))
+}
+
+func (p Pitch) String() string {
+	noteName := noteNames[Note(p.Index())]
+	o := p.Octave()
+	c := p.Cents()
+	var octaveName string
+	if o < 0 {
+		octaveName = fmt.Sprintf("[%v]", o)
+	} else {
+		octaveName = fmt.Sprintf("%v", o)
+	}
+	if c != 0 {
+		return fmt.Sprintf("%v%v (%v cents)", noteName, octaveName, c)
+	}
+	return noteName + octaveName
 }
 
 func (p Pitch) Note() Note {
