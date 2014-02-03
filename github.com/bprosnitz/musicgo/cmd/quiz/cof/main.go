@@ -3,24 +3,25 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"musicgo"
-	"musicgo/intervals"
+
+	. "github.com/bprosnitz/musicgo"
+	"github.com/bprosnitz/musicgo/intervals"
 )
 
-func randomNote() musicgo.Note {
-	return musicgo.Note(rand.Intn(12))
+func randomNote() Note {
+	return Note(rand.Intn(12))
 }
 
-func fifth(n musicgo.Note) musicgo.Note {
+func fifth(n Note) Note {
 	return n.Interval(intervals.Fifth)
 }
 
-func getResponse() (musicgo.Note, error) {
+func getResponse() (Note, error) {
 	var answer string
 	if _, err := fmt.Scanf("%s\n", &answer); err != nil {
 		return 0, fmt.Errorf("Badly formatted answer: %v", err)
 	}
-	a, err := musicgo.ParseNote(answer)
+	a, err := ParseNote(answer)
 	if err != nil {
 		return 0, fmt.Errorf("Error parsing note: %v", err)
 	}
@@ -31,7 +32,7 @@ func ask() {
 	n := randomNote()
 	f := fifth(n)
 
-	var answer musicgo.Note
+	var answer Note
 	if rand.Intn(2) == 0 {
 		fmt.Printf("What is a fifth above %v? ", n)
 		answer = f

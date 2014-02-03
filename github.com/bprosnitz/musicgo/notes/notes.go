@@ -1,8 +1,6 @@
 package notes
 
-import (
-	"musicgo"
-)
+import "github.com/bprosnitz/musicgo"
 
 const (
 	C musicgo.Note = iota

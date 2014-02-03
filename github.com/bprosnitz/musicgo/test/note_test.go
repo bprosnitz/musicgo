@@ -5,13 +5,13 @@ package test
 import (
 	"testing"
 
-	"musicgo"
-	"musicgo/intervals"
-	"musicgo/notes"
+	. "github.com/bprosnitz/musicgo"
+	"github.com/bprosnitz/musicgo/intervals"
+	"github.com/bprosnitz/musicgo/notes"
 )
 
 func TestString(t *testing.T) {
-	for n := musicgo.Note(0); n < 12; n++ {
+	for n := Note(0); n < 12; n++ {
 		letter := "B"
 		for letter_val, num := range noteOffsets {
 			if num > n {
@@ -23,7 +23,7 @@ func TestString(t *testing.T) {
 				letter = string(letter_val) + "#"
 			}
 		}
-		if musicgo.Note(n).String() != letter {
+		if Note(n).String() != letter {
 			t.Errorf("Note value %v and representation %v don't match", n, letter)
 		}
 	}
@@ -56,11 +56,11 @@ func TestParseNote(t *testing.T) {
 		switch data.(type) {
 		case *equalData:
 			ed := data.(*equalData)
-			n1, err := musicgo.ParseNote(ed.first)
+			n1, err := ParseNote(ed.first)
 			if err != nil {
 				t.Errorf("Error parsing %v: %v", ed.first, err)
 			}
-			n2, err := musicgo.ParseNote(ed.second)
+			n2, err := ParseNote(ed.second)
 			if err != nil {
 				t.Errorf("Error parsing %v: %v", ed.second, err)
 			}
@@ -69,11 +69,11 @@ func TestParseNote(t *testing.T) {
 			}
 		case *unequalData:
 			ud := data.(*unequalData)
-			n1, err := musicgo.ParseNote(ud.first)
+			n1, err := ParseNote(ud.first)
 			if err != nil {
 				t.Errorf("Error parsing %v: %v", ud.first, err)
 			}
-			n2, err := musicgo.ParseNote(ud.second)
+			n2, err := ParseNote(ud.second)
 			if err != nil {
 				t.Errorf("Error parsing %v: %v", ud.second, err)
 			}
@@ -82,7 +82,7 @@ func TestParseNote(t *testing.T) {
 			}
 		case *errorData:
 			ed := data.(*errorData)
-			_, err := musicgo.ParseNote(ed.str)
+			_, err := ParseNote(ed.str)
 			if err == nil {
 				t.Errorf("Error was expected with %v", ed.str)
 			}
@@ -92,9 +92,9 @@ func TestParseNote(t *testing.T) {
 
 func TestInterval(t *testing.T) {
 	type expectedResult struct {
-		initial  musicgo.Note
-		interval musicgo.Interval
-		final    musicgo.Note
+		initial  Note
+		interval Interval
+		final    Note
 	}
 	tests := []expectedResult{
 		expectedResult{notes.C, intervals.Unison, notes.C},
@@ -112,8 +112,8 @@ func TestInterval(t *testing.T) {
 
 func TestIndex(t *testing.T) {
 	type expectedResult struct {
-		input  musicgo.Note
-		output musicgo.NoteIndex
+		input  Note
+		output NoteIndex
 	}
 	tests := []expectedResult{
 		expectedResult{notes.C, 0},
@@ -134,8 +134,8 @@ func TestIndex(t *testing.T) {
 
 func TestCents(t *testing.T) {
 	type expectedResult struct {
-		input  musicgo.Note
-		output musicgo.Cents
+		input  Note
+		output Cents
 	}
 	tests := []expectedResult{
 		expectedResult{notes.C, 0},
@@ -154,7 +154,7 @@ func TestCents(t *testing.T) {
 	}
 }
 
-var noteOffsets map[rune]musicgo.Note = map[rune]musicgo.Note{
+var noteOffsets map[rune]Note = map[rune]Note{
 	'C': 0,
 	'D': 2,
 	'E': 4,

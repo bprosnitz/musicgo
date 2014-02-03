@@ -1,6 +1,6 @@
 package intervals
 
-import "musicgo"
+import "github.com/bprosnitz/musicgo"
 
 const (
 	Unison musicgo.Interval = iota
