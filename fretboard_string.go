@@ -10,6 +10,10 @@ type FretboardOffset int
 
 const nilOffset FretboardOffset = 0
 
+func (fs FretboardString) String() string {
+	return Pitch(fs).String()
+}
+
 func (fs FretboardString) Fret(pitch Pitch) (FretboardOffset, error) {
 	offset := FretboardString(pitch) - fs
 	pos := FretboardOffset(math.Floor(float64(offset + 0.5)))
