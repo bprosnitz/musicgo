@@ -8,6 +8,30 @@ import (
 	"github.com/bprosnitz/musicgo/notes"
 )
 
+func TestFretboardLayoutHashConsing(t *testing.T) {
+	if guitar.StandardTuning != NewFretboardLayout(
+		FretboardString(notes.E.Octave(4)),
+		FretboardString(notes.B.Octave(3)),
+		FretboardString(notes.G.Octave(3)),
+		FretboardString(notes.D.Octave(3)),
+		FretboardString(notes.A.Octave(2)),
+		FretboardString(notes.E.Octave(2))) {
+		t.Errorf("Expected copy of standard tuning to be equal to it")
+	}
+
+	if NewFretboardLayout(FretboardString(notes.A.Octave(2))) != NewFretboardLayout(FretboardString(notes.A.Octave(2))) {
+		t.Errorf("Expected equivilent note fretboards to be equal")
+	}
+
+	if NewFretboardLayout(FretboardString(notes.B.Octave(2))) == NewFretboardLayout(FretboardString(notes.A.Octave(2))) {
+		t.Errorf("Expected different single note fretboards to not be equal")
+	}
+
+	if NewFretboardLayout() != NewFretboardLayout() {
+		t.Errorf("Expected empty fretboards to be equivilent")
+	}
+}
+
 func TestFretboardStringFret(t *testing.T) {
 	type expectedResult struct {
 		in    FretboardString

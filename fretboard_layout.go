@@ -2,6 +2,7 @@ package musicgo
 
 import (
 	"bytes"
+	"sync"
 )
 
 type StringIndex int
@@ -10,8 +11,41 @@ type FretboardLayout struct {
 	strings []FretboardString
 }
 
+type fretboardLayoutHashConsCacheType struct {
+	cache []*FretboardLayout
+	mutex sync.Mutex
+}
+
+func (flc *fretboardLayoutHashConsCacheType) HashCons(fl *FretboardLayout) *FretboardLayout {
+	flc.mutex.Lock()
+	for _, existingLayout := range flc.cache {
+		existingStrings := existingLayout.strings
+		if len(existingStrings) != len(fl.strings) {
+			continue
+		}
+		foundDifference := false
+		for i, existingString := range existingLayout.strings {
+			if fl.strings[i] != existingString {
+				foundDifference = true
+				break
+			}
+		}
+
+		if !foundDifference {
+			flc.mutex.Unlock()
+			return existingLayout
+		}
+	}
+	flc.cache = append(flc.cache, fl)
+
+	flc.mutex.Unlock()
+	return fl
+}
+
+var fretboardLayoutCache fretboardLayoutHashConsCacheType = fretboardLayoutHashConsCacheType{}
+
 func NewFretboardLayout(strings ...FretboardString) *FretboardLayout {
-	return &FretboardLayout{strings: strings}
+	return fretboardLayoutCache.HashCons(&FretboardLayout{strings: strings})
 }
 
 func (fl *FretboardLayout) String() string {
