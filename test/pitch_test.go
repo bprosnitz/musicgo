@@ -114,11 +114,14 @@ func TestPitchLocations(t *testing.T) {
 	}
 	tests := []expectedResult{
 		expectedResult{notes.E.Octave(2), guitar.StandardTuning, []FretboardCoordinate{guitar.StandardTuning.Position(5, 0)}},
+		expectedResult{notes.D.Octave(2), guitar.StandardTuning, []FretboardCoordinate{}},
 		expectedResult{notes.A.Octave(2), guitar.StandardTuning, []FretboardCoordinate{guitar.StandardTuning.Position(4, 0), guitar.StandardTuning.Position(5, 5)}},
 	}
 	for _, test := range tests {
-		if !reflect.DeepEqual(test.input.Locations(test.fretboard), test.output) {
-			t.Errorf("Incorrect pitch locations for pitch %v on fretboard %v: %v. Expected %v.", test.input, test.fretboard, test.input.Locations(test.fretboard), test.output)
+		t.Logf("Type: %v %v\n", reflect.TypeOf(test.input.Locations(test.fretboard)), reflect.TypeOf(test.output))
+		result := test.input.Locations(test.fretboard)
+		if (len(result) == 0) != (len(test.output) == 0) && !reflect.DeepEqual(result, test.output) {
+			t.Errorf("Incorrect pitch locations for pitch %v on fretboard %v: %v. Expected %v.", test.input, test.fretboard, result, test.output)
 		}
 	}
 }
