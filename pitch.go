@@ -47,6 +47,21 @@ func (p Pitch) String() string {
 	return noteName + octaveName
 }
 
+func (p Pitch) Locations(fl *FretboardLayout) []FretboardCoordinate {
+	var coords []FretboardCoordinate
+	for i := 0; i < fl.NumString(); i++ {
+		index, err := fl.FretboardString(StringIndex(i)).Fret(p)
+		if err == nil {
+			coords = append(coords,
+				FretboardCoordinate{
+					fretboardString: StringIndex(i),
+					fret:            FretboardOffset(index),
+					fretboardLayout: fl})
+		}
+	}
+	return coords
+}
+
 func (p Pitch) Note() Note {
 	return normalize(Note(p))
 }

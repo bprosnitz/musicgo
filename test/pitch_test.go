@@ -3,9 +3,11 @@ package test
 // test is a separate package to remove an import cycle (for musicgo/notes)
 
 import (
+	"reflect"
 	"testing"
 
 	. "github.com/bprosnitz/musicgo"
+	"github.com/bprosnitz/musicgo/guitar"
 	"github.com/bprosnitz/musicgo/intervals"
 	"github.com/bprosnitz/musicgo/notes"
 )
@@ -100,6 +102,23 @@ func TestPitchOctave(t *testing.T) {
 	for _, test := range tests {
 		if test.input.Octave() != test.output {
 			t.Errorf("Invalid octave for %s: %v. Expected %v.", test.input, test.input.Octave(), test.output)
+		}
+	}
+}
+
+func TestPitchLocations(t *testing.T) {
+	type expectedResult struct {
+		input     Pitch
+		fretboard *FretboardLayout
+		output    []FretboardCoordinate
+	}
+	tests := []expectedResult{
+		expectedResult{notes.E.Octave(2), guitar.StandardTuning, []FretboardCoordinate{guitar.StandardTuning.Position(5, 0)}},
+		expectedResult{notes.A.Octave(2), guitar.StandardTuning, []FretboardCoordinate{guitar.StandardTuning.Position(4, 0), guitar.StandardTuning.Position(5, 5)}},
+	}
+	for _, test := range tests {
+		if !reflect.DeepEqual(test.input.Locations(test.fretboard), test.output) {
+			t.Errorf("Incorrect pitch locations for pitch %v on fretboard %v: %v. Expected %v.", test.input, test.fretboard, test.input.Locations(test.fretboard), test.output)
 		}
 	}
 }
